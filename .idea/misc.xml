@@ -3,14 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/layout-land/activity_lugar_create.xml" value="0.22552083333333334" />
+        <entry key="app/src/main/res/layout-land/content_scrolling.xml" value="0.25" />
         <entry key="app/src/main/res/layout-w1240dp/content_scrolling.xml" value="0.169140625" />
         <entry key="app/src/main/res/layout-w936dp/content_scrolling.xml" value="0.1478825136612022" />
+        <entry key="app/src/main/res/layout/activity_lugar_create.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/activity_scrolling.xml" value="0.19610507246376813" />
         <entry key="app/src/main/res/layout/content_scrolling.xml" value="0.1897644927536232" />
       </map>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
