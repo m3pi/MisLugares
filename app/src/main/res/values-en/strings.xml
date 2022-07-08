@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">MyPlacesDemo</string>
+    <string name="action_mis_lugares">Show Places</string>
+    <string name="action_preferencias">Preferences</string>
+    <string name="action_info">About</string>
+    <string name="action_salir">Quit</string>
+    <string name="title_activity_lugar_create">Create</string>
+</resources>

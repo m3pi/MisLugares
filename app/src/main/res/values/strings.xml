@@ -94,5 +94,5 @@
     <string name="action_preferencias">Preferencias</string>
     <string name="action_info">Acerca de</string>
     <string name="action_salir">Salir</string>
-    <string name="title_activity_lugar_create">LugarCreate</string>
+    <string name="title_activity_lugar_create">Crear</string>
 </resources>

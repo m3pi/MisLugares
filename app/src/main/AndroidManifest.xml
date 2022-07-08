@@ -13,11 +13,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MisLugaresDemo"
         tools:targetApi="31">
+        <!--Se puede aplicar un tema a la actividad con android:theme="" -->
         <!--<activity
             android:name=".LugarCreateActivity"
             android:exported="false" />-->
         <activity
-            android:name=".ScrollingActivity"
+            android:name=".LugarCreateActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.MisLugaresDemo.NoActionBar">

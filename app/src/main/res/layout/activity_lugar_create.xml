@@ -59,5 +59,11 @@
             android:hint="Comentario"
             android:inputType="textMultiLine"/>
 
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/et_comentarioStilo"
+            style="@style/mi_estilo.grande.negrita"
+            android:hint="Comentario"
+            android:inputType="textMultiLine" />
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

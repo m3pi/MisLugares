@@ -12,6 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <!-- Establecer el tipo de fuente para toda la aplicación-->
+        <item name="android:typeface">serif</item>
     </style>
 
     <style name="Theme.MisLugaresDemo.NoActionBar">
