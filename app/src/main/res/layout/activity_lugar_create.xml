@@ -65,5 +65,36 @@
             android:hint="Comentario"
             android:inputType="textMultiLine" />
 
+        <EditText
+            android:id="@+id/edt_entrada"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Introduce número"
+            android:inputType="numberDecimal" />
+
+        <Button
+            android:id="@+id/btn_cero"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="pulsarCero"
+            android:tag="0"
+            android:text="0" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="pulsar"
+            app:srcCompat="@drawable/boton" />
+
+        <TextView
+            android:hint="Resultado"
+            android:id="@+id/tv_salida"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#0000FF"/>
+
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
