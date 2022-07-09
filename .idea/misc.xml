@@ -10,8 +10,11 @@
         <entry key="app/src/main/res/layout-land/content_scrolling.xml" value="0.22552083333333334" />
         <entry key="app/src/main/res/layout-w1240dp/content_scrolling.xml" value="0.169140625" />
         <entry key="app/src/main/res/layout-w936dp/content_scrolling.xml" value="0.1478825136612022" />
+        <entry key="app/src/main/res/layout/activity_about.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_lugar_create.xml" value="0.19610507246376813" />
-        <entry key="app/src/main/res/layout/activity_scrolling.xml" value="0.19610507246376813" />
+        <entry key="app/src/main/res/layout/activity_scrolling.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_terminos.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_validacion.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_scrolling.xml" value="0.1897644927536232" />
       </map>
     </option>

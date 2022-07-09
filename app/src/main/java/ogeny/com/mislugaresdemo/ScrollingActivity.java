@@ -1,5 +1,6 @@
 package ogeny.com.mislugaresdemo;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,12 +15,14 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 
 import ogeny.com.mislugaresdemo.databinding.ActivityScrollingBinding;
 
 public class ScrollingActivity extends AppCompatActivity {
 
     private ActivityScrollingBinding binding;
+    private Button btnAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,22 @@ public class ScrollingActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        btnAbout = (Button) findViewById(R.id.btn_info);
+        btnAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openAboutActivity(null);
+            }
+        });
+
+        Button btnSalir = (Button) findViewById(R.id.btn_salir);
+        btnSalir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeApp(view);
             }
         });
     }
@@ -78,5 +97,15 @@ public class ScrollingActivity extends AppCompatActivity {
         int[] primos =res.getIntArray(R.array.primos);
         TypedArray asteroides =res.obtainTypedArray(R.array.asteroides);
         Drawable asteroide1 =asteroides.getDrawable(0);*/
+    }
+
+    private void openAboutActivity(View view) {
+        /*Intent intent = new Intent(this, AboutActivity.class);*/
+        startActivity(new Intent(this, AboutActivity.class));
+    }
+
+    public void closeApp(View view) {
+        // finish();
+        startActivity(new Intent(this, ValidacionActivity.class));
     }
 }
