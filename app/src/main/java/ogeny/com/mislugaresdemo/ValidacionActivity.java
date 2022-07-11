@@ -45,4 +45,39 @@ public class ValidacionActivity extends AppCompatActivity {
         intent.putExtra("nombre", edtNombre.getText().toString());
         startActivityForResult(intent, 1234);
     }
+
+/*
+    public void openSomeActivityForResult() {
+        Intent intent = new Intent(this, SomeActivity.class);
+        someActivityResultLauncher.launch(intent);
+    }
+
+    // You can do the assignment inside onAttach or onCreate, i.e, before the activity is displayed
+    ActivityResultLauncher<Intent> someActivityResultLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        // There are no request codes
+                        Intent data = result.getData();
+                        doSomeOperations();
+                    }
+                }
+            });
+
+    The new way (Kotlin):
+
+    fun openSomeActivityForResult() {
+        val intent = Intent(this, SomeActivity::class.java)
+        resultLauncher.launch(intent)
+    }
+
+    var resultLauncher = registerForActivityResult(StartActivityForResult()) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            // There are no request codes
+            val data: Intent? = result.data
+            doSomeOperations()
+        }
+    }*/
 }
