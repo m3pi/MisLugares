@@ -18,7 +18,9 @@
             android:exported="false" />
         <activity
             android:name=".TerminosActivity"
-            android:exported="false" /> <!-- Se puede aplicar un tema a la actividad con android:theme="" -->
+            android:exported="false"
+            />
+        <!-- Se puede aplicar un tema a la actividad con android:theme="" -->
         <!--
 <activity
             android:name=".LugarCreateActivity"

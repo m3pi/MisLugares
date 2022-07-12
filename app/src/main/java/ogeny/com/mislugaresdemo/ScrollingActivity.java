@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.Toast;
 
 import ogeny.com.mislugaresdemo.databinding.ActivityScrollingBinding;
 
@@ -78,6 +79,14 @@ public class ScrollingActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            return true;
+        }
+        if (id == R.id.action_preferences) {
+            Toast.makeText(this, "Preferencias selected", Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        if (id == R.id.action_about) {
+            Toast.makeText(this, "About selected", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onOptionsItemSelected(item);

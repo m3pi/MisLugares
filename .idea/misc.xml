@@ -16,6 +16,8 @@
         <entry key="app/src/main/res/layout/activity_terminos.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_validacion.xml" value="0.1" />
         <entry key="app/src/main/res/layout/content_scrolling.xml" value="0.1897644927536232" />
+        <entry key="app/src/main/res/menu/menu_lugar_create.xml" value="0.1" />
+        <entry key="app/src/main/res/menu/menu_scrolling.xml" value="0.1" />
       </map>
     </option>
   </component>
