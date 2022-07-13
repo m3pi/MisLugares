@@ -1,11 +1,18 @@
 package ogeny.com.mislugaresdemo;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,6 +28,23 @@ import ogeny.com.mislugaresdemo.models.Lugar;
 public class LugarInfoActivity extends AppCompatActivity {
     private long id;
     private Lugar lugar;
+    final static int RESULTADO_EDITAR = 1;
+
+    ActivityResultLauncher<Intent> activityResultLauncher =
+            registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    new ActivityResultCallback<ActivityResult>() {
+                        @Override
+                        public void onActivityResult(ActivityResult result) {
+                            Log.i("resultado", Integer.toString(result.getResultCode()));
+                            if (result.getResultCode() == Activity.RESULT_OK) {
+                                // otra opcion es obtener el valor de un extra
+                                Log.i("llamada", "ingreso");
+                                updateLayout();
+                                findViewById(R.id.info_lugar).invalidate();
+                            }
+                        }
+                    });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +54,58 @@ public class LugarInfoActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         id = extras.getLong("id", -1);
+        updateLayout();
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_lugar_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                return true;
+            case R.id.action_como_llegar:
+                return true;
+            case R.id.action_edit:
+                openLugarEeditActivity();
+                return true;
+            case R.id.action_delete:
+                eliminarLugar();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    void eliminarLugar() {
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar Lugar")
+                .setMessage("¿Está seguro de eliminar este lugar?")
+                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ScrollingActivity.iLugar.borrar((int) id);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
+    }
+
+    private void openLugarEeditActivity() {
+        Intent intent = new Intent(this, LugarCreateActivity.class);
+        intent.putExtra("id", id);
+        /*startActivity(intent);*/
+        activityResultLauncher.launch(intent);
+    }
+
+    private void updateLayout() {
         lugar = ScrollingActivity.iLugar.getLugarById((int) id);
 
         TextView tevNombre = (TextView) findViewById(R.id.tev_nombre_lugar);
@@ -93,45 +169,6 @@ public class LugarInfoActivity extends AppCompatActivity {
                 lugar.setValoracion(v);
             }
         });
-
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        //return super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_lugar_info, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_share:
-                return true;
-            case R.id.action_como_llegar:
-                return true;
-            case R.id.action_edit:
-                return true;
-            case R.id.action_delete:
-                eliminarLugar();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    void eliminarLugar() {
-        new AlertDialog.Builder(this)
-                .setTitle("Eliminar Lugar")
-                .setMessage("¿Está seguro de eliminar este lugar?")
-                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        ScrollingActivity.iLugar.borrar((int) id);
-                        finish();
-                    }
-                })
-                .setNegativeButton("Cancelar", null)
-                .show();
-    }
 }

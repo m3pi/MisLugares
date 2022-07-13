@@ -3,8 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="ogeny.com.mislugaresdemo.LugarCreate">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_cancel"
+        android:orderInCategory="90"
+        android:title="Cancelar"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_guardar"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title="Guardar"
+        app:showAsAction="always" />
 </menu>

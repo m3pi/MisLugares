@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_nombre"
+            android:id="@+id/edt_nombre"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -21,43 +21,50 @@
         </androidx.appcompat.widget.AppCompatEditText>
 
         <TextView
-            android:id="@+id/text_view_id"
+            android:id="@+id/tev_tipo"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:text="Tipo" />
 
         <androidx.appcompat.widget.AppCompatSpinner
-            android:id="@+id/sp_tipo"
+            android:id="@+id/spr_tipo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_direccion"
+            android:id="@+id/edt_direccion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Dirección"
             android:inputType="textPostalAddress"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_telefono"
+            android:id="@+id/edt_telefono"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Teléfono"
             android:inputType="phone"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_url"
+            android:id="@+id/edt_url"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Página web"
             android:inputType="textUri"/>
 
         <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/et_comentario"
+            android:id="@+id/edt_comentario"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Comentario"
             android:inputType="textMultiLine"/>
+
+    </LinearLayout>
+    <!--<LinearLayout
+        android:id="@+id/ejm_boton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatEditText
             android:id="@+id/et_comentarioStilo"
@@ -95,6 +102,5 @@
             android:layout_height="wrap_content"
             android:text=""
             android:textColor="#0000FF"/>
-
-    </LinearLayout>
+    </LinearLayout>-->
 </androidx.core.widget.NestedScrollView>
