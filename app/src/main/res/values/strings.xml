@@ -93,6 +93,7 @@
     <string name="action_mis_lugares">Mostrar Lugares</string>
     <string name="action_preferencias">Preferencias</string>
     <string name="action_info">Acerca de</string>
+    <string name="action_terminos">Términos y Condiciones</string>
     <string name="action_salir">Salir</string>
     <string name="title_activity_lugar_create">Crear</string>
 </resources>

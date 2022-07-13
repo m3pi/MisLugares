@@ -34,6 +34,12 @@
             android:text="@string/action_info" />
 
         <Button
+            android:id="@+id/btn_terminos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/action_terminos" />
+
+        <Button
             android:id="@+id/btn_salir"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

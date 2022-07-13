@@ -1,6 +1,7 @@
 package ogeny.com.mislugaresdemo;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,6 +26,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
     private ActivityScrollingBinding binding;
     private Button btnAbout;
+    private Button btnPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,14 @@ public class ScrollingActivity extends AppCompatActivity {
             }
         });
 
+        Button btnTerminos = (Button) findViewById(R.id.btn_terminos);
+        btnTerminos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openTerminoCondiciones();
+            }
+        });
+
         Button btnSalir = (Button) findViewById(R.id.btn_salir);
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +72,16 @@ public class ScrollingActivity extends AppCompatActivity {
                 closeApp(view);
             }
         });
+
+        btnPreferences = (Button) findViewById(R.id.btn_preferencias);
+        btnPreferences.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openPreferencesActivity();
+            }
+        });
+
+        mostrarPreferencias();
     }
 
     @Override
@@ -82,11 +103,11 @@ public class ScrollingActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.action_preferences) {
-            Toast.makeText(this, "Preferencias selected", Toast.LENGTH_SHORT).show();
+            openPreferencesActivity();
             return true;
         }
         if (id == R.id.action_about) {
-            Toast.makeText(this, "About selected", Toast.LENGTH_SHORT).show();
+            openAboutActivity(null);
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -113,8 +134,25 @@ public class ScrollingActivity extends AppCompatActivity {
         startActivity(new Intent(this, AboutActivity.class));
     }
 
-    public void closeApp(View view) {
-        // finish();
+    private void openPreferencesActivity() {
+        /*Intent intent = new Intent(this, AboutActivity.class);*/
+        startActivity(new Intent(this, PreferencesActivity.class));
+    }
+
+    void openTerminoCondiciones() {
         startActivity(new Intent(this, ValidacionActivity.class));
+    }
+
+    public void closeApp(View view) {
+        finish();
+    }
+
+    // mostrar las preferencias
+    void mostrarPreferencias() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String msg = String.format("Notificaciones %s, máximo alistar: %s",
+                preferences.getBoolean("pref_notificaciones", true),
+                preferences.getString("pref_maximo_lugares_pagina", "?"));
+        Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
 }

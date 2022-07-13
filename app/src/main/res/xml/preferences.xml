@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:key="pref_main">
+    <PreferenceCategory
+        android:title="Notificaciones">
+        <CheckBoxPreference
+            android:key="pref_notificaciones"
+            android:title="Enviar notificaciones"
+            android:summary="Notificaciones serca de un lugar" />
+
+        <EditTextPreference
+            android:key="pref_maximo_lugares_pagina"
+            android:title="Máximo de lugares a mostrar"
+            android:summary="Inidca la cantidad de lugares a mostrar en una lista"
+            android:inputType="number"
+            android:defaultValue="12" />
+
+        <ListPreference
+            android:key="orden_lugares"
+            android:title="Criterio de ordenación"
+            android:summary="Que lugares se mostraran primero"
+            android:entries="@array/tiposOrden"
+            android:entryValues="@array/tiposOrdenValores"
+            android:defaultValue="1" />
+    </PreferenceCategory>
+
+    <PreferenceScreen
+        android:title="Notificaiones por correo">
+        <SwitchPreference
+            android:key="pref_recicibir_correos"
+            android:title="Recibir correos"
+            android:summary="Recibir correos con información de lugares" />
+
+        <EditTextPreference
+            android:key="pref_correo_notificacion"
+            android:title="Dirección de correo"
+            android:summary="Dirección donde se enviarán las notificaciones"  />
+
+        <ListPreference
+            android:key="pref_tipos_notificacion"
+            android:summary="Que tipos de correos quieres recibir"
+            android:entries="@array/tiposNotificacion"
+            android:entryValues="@array/tiposNotificacionValues"
+            android:defaultValue="1" />
+    </PreferenceScreen>
+
+    <PreferenceCategory
+        android:title="Modo multijugador">
+        <SwitchPreference
+            android:key="pref_modo_online"
+            android:title="Online"
+            android:summary="indicar si el juego es online o offline" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
