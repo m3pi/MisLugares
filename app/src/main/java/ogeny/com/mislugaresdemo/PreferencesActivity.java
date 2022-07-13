@@ -12,9 +12,14 @@ public class PreferencesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_preferences);
 
         // insertando preferencias
-        getFragmentManager()
+        /*getFragmentManager()
                 .beginTransaction()
                 .replace(android.R.id.content,  new PreferencesFragment())
+                .commit();*/
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.settings_container, new PreferencesFragment())
                 .commit();
     }
 }
