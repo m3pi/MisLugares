@@ -21,12 +21,15 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import ogeny.com.mislugaresdemo.databinding.ActivityScrollingBinding;
+import ogeny.com.mislugaresdemo.interfaces.ILugar;
+import ogeny.com.mislugaresdemo.models.LugaresVector;
 
 public class ScrollingActivity extends AppCompatActivity {
 
     private ActivityScrollingBinding binding;
     private Button btnAbout;
     private Button btnPreferences;
+    public static ILugar iLugar = new LugaresVector();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +105,12 @@ public class ScrollingActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
+
+        if (id == R.id.menu_buscar) {
+            openLugarInfoActivity();
+            return true;
+        }
+
         if (id == R.id.action_preferences) {
             openPreferencesActivity();
             return true;
@@ -141,6 +150,12 @@ public class ScrollingActivity extends AppCompatActivity {
 
     void openTerminoCondiciones() {
         startActivity(new Intent(this, ValidacionActivity.class));
+    }
+
+    void openLugarInfoActivity() {
+        Intent intent = new Intent(this, LugarInfoActivity.class);
+        intent.putExtra("id", (long) 0);
+        startActivity(intent);
     }
 
     public void closeApp(View view) {

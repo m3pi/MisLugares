@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".LugarInfoActivity"
+    android:id="@+id/info_lugar">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <TextView
+            android:id="@+id/tev_nombre_lugar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Nombre del Lugar"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_logo_tipo"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Logo del tipo"
+                app:srcCompat="@drawable/otros" />
+
+            <TextView
+                android:id="@+id/tev_tipo_logo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Tipo del lugar"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_direccion"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Logo de la dirección"
+                app:srcCompat="@android:drawable/ic_menu_directions" />
+
+            <TextView
+                android:id="@+id/tev_direccion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Direccion"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_telefono"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Logo de la Teléfono"
+                app:srcCompat="@android:drawable/ic_menu_call" />
+
+            <TextView
+                android:id="@+id/tev_telefono"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Teléfono"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_url"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Logo de la url"
+                app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+            <TextView
+                android:id="@+id/tev_url"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Url"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_comentario"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Logo del comentario"
+                app:srcCompat="@android:drawable/ic_menu_info_details" />
+
+            <TextView
+                android:id="@+id/tev_comentario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Comentario"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_fecha"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Logo de la fecha"
+                app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+            <TextView
+                android:id="@+id/tev_fecha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Fecha"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/imv_hora"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:contentDescription="Logo de la hora"
+                app:srcCompat="@android:drawable/ic_menu_recent_history" />
+
+            <TextView
+                android:id="@+id/tev_hora"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Hora"
+                android:textAppearance="?android:attr/textAppearanceMedium"/>
+        </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/rab_valoracion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_toRightOf="@+id/foto"
+            android:rating="3"/>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imv_foto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:contentDescription="Fotografía"
+                app:srcCompat="@drawable/foto_epsg" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="right">
+
+                <ImageView
+                    android:id="@+id/imv_camara"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="Logo cámara"
+                    app:srcCompat="@android:drawable/ic_menu_camera" />
+
+                <ImageView
+                    android:id="@+id/imv_galeria"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:contentDescription="Logo galería"
+                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+</ScrollView>
