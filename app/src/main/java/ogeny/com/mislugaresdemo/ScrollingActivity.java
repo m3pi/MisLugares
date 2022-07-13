@@ -1,5 +1,7 @@
 package ogeny.com.mislugaresdemo;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -18,18 +20,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import ogeny.com.mislugaresdemo.databinding.ActivityScrollingBinding;
 import ogeny.com.mislugaresdemo.interfaces.ILugar;
-import ogeny.com.mislugaresdemo.models.LugaresVector;
+import ogeny.com.mislugaresdemo.interfaces.LugarService;
 
 public class ScrollingActivity extends AppCompatActivity {
 
     private ActivityScrollingBinding binding;
     private Button btnAbout;
     private Button btnPreferences;
-    public static ILugar iLugar = new LugaresVector();
+    public static ILugar iLugar = new LugarService();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,9 +156,33 @@ public class ScrollingActivity extends AppCompatActivity {
     }
 
     void openLugarInfoActivity() {
-        Intent intent = new Intent(this, LugarInfoActivity.class);
+        /*Intent intent = new Intent(this, LugarInfoActivity.class);
         intent.putExtra("id", (long) 0);
-        startActivity(intent);
+        startActivity(intent);*/
+
+        final EditText edtBuscar = new EditText(this);
+        edtBuscar.setText("0");
+
+        // podría ser así
+        /*AlertDialog.Builder object = new AlertDialog.Builder(this);
+        object.setTitle("Mi título");*/
+
+        new AlertDialog.Builder(this)
+                .setTitle("Selección de lugar")
+                .setMessage("Indica el id")
+                .setView(edtBuscar)
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        long id = Long.parseLong(edtBuscar.getText().toString());
+
+                        Intent intent = new Intent(ScrollingActivity.this, LugarInfoActivity.class);
+                        intent.putExtra("id", id);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 
     public void closeApp(View view) {

@@ -1,17 +1,19 @@
-package ogeny.com.mislugaresdemo.models;
+package ogeny.com.mislugaresdemo.interfaces;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ogeny.com.mislugaresdemo.interfaces.ILugar;
+import ogeny.com.mislugaresdemo.models.Lugar;
+import ogeny.com.mislugaresdemo.models.TipoLugar;
 
-public class LugaresVector implements ILugar {
+public class LugarService implements ILugar {
     protected List<Lugar> vectorLugares = ejemploLugares();
 
-    public LugaresVector() {
+    public LugarService() {
         vectorLugares = ejemploLugares();
     }
-    public Lugar elemento(int id) {
+    public Lugar getLugarById(int id) {
         return vectorLugares.get(id);
     }
 

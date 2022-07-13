@@ -1,8 +1,14 @@
 package ogeny.com.mislugaresdemo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -24,7 +30,7 @@ public class LugarInfoActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         id = extras.getLong("id", -1);
-        lugar = ScrollingActivity.iLugar.elemento((int) id);
+        lugar = ScrollingActivity.iLugar.getLugarById((int) id);
 
         TextView tevNombre = (TextView) findViewById(R.id.tev_nombre_lugar);
         tevNombre.setText(lugar.getNombre());
@@ -36,16 +42,39 @@ public class LugarInfoActivity extends AppCompatActivity {
         tevTipoLogo.setText(lugar.getTipoLugar().getTexto());
 
         TextView tevDireccion = (TextView) findViewById(R.id.tev_direccion);
-        tevDireccion.setText(lugar.getDireccion());
+        if (lugar.getDireccion().isEmpty()) {
+            tevDireccion.setVisibility(View.GONE);
+        } else {
+            tevDireccion.setVisibility(View.VISIBLE);
+            tevDireccion.setText(lugar.getDireccion());
+        }
 
         TextView tevTelefono = (TextView) findViewById(R.id.tev_telefono);
-        tevTelefono.setText(Integer.toString(lugar.getTelefono()));
+        if (lugar.getTelefono() == 0) {
+            // View.GONE no muestra la estas propiedades la vista ni el espacio ocupado
+            // findViewById(R.id.tev_telefono).setVisibility(View.GONE);
+            tevTelefono.setVisibility(View.GONE);
+        } else {
+            tevTelefono.setVisibility(View.VISIBLE);
+            //TextView tevTelefono = (TextView) findViewById(R.id.tev_telefono);
+            tevTelefono.setText(Integer.toString(lugar.getTelefono()));
+        }
 
         TextView tevUrl = (TextView) findViewById(R.id.tev_url);
-        tevUrl.setText(lugar.getUrl());
+        if (lugar.getUrl().isEmpty()) {
+            tevUrl.setVisibility(View.GONE);
+        } else {
+            tevUrl.setVisibility(View.VISIBLE);
+            tevUrl.setText(lugar.getUrl());
+        }
 
         TextView tevComentario = (TextView) findViewById(R.id.tev_comentario);
-        tevComentario.setText(lugar.getComentario());
+        if (lugar.getComentario().isEmpty()) {
+            tevComentario.setVisibility(View.VISIBLE);
+        } else {
+            tevComentario.setVisibility(View.VISIBLE);
+            tevComentario.setText(lugar.getComentario());
+        }
 
         TextView tevFecha = (TextView) findViewById(R.id.tev_fecha);
         tevFecha.setText(DateFormat.getDateInstance()
@@ -65,5 +94,44 @@ public class LugarInfoActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_lugar_info, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_share:
+                return true;
+            case R.id.action_como_llegar:
+                return true;
+            case R.id.action_edit:
+                return true;
+            case R.id.action_delete:
+                eliminarLugar();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    void eliminarLugar() {
+        new AlertDialog.Builder(this)
+                .setTitle("Eliminar Lugar")
+                .setMessage("¿Está seguro de eliminar este lugar?")
+                .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        ScrollingActivity.iLugar.borrar((int) id);
+                        finish();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 }
