@@ -88,6 +88,14 @@ public class ScrollingActivity extends AppCompatActivity {
         });
 
         mostrarPreferencias();
+
+        Button btnMisLugares = (Button) findViewById(R.id.btn_mostrar_lugares);
+        btnMisLugares.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openLugaresListActivity();
+            }
+        });
     }
 
     @Override
@@ -183,6 +191,10 @@ public class ScrollingActivity extends AppCompatActivity {
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
+    }
+
+    void openLugaresListActivity() {
+        startActivity(new Intent(this, LugarListActivity.class));
     }
 
     public void closeApp(View view) {
