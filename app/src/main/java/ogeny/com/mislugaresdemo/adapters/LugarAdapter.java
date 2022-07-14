@@ -1,29 +1,27 @@
-package ogeny.com.mislugaresdemo;
+package ogeny.com.mislugaresdemo.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import ogeny.com.mislugaresdemo.R;
 import ogeny.com.mislugaresdemo.interfaces.ILugar;
 import ogeny.com.mislugaresdemo.models.Lugar;
 
 public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> {
     protected ILugar iLugar; // Lista de lugares
-    protected LayoutInflater layoutInflater; // Crea layouts a partir de archivos xml
-    protected Context context; // Lo necesitamos para el inflater
+    // protected LayoutInflater layoutInflater; // Crea layouts a partir de archivos xml
+    // protected Context context; // Lo necesitamos para el inflater
 
-    public LugarAdapter(Context _context, ILugar _iLugar) {
-        this.context = _context;
+    public LugarAdapter(/*Context _context,*/ ILugar _iLugar) {
+        // this.context = _context;
         this.iLugar = _iLugar;
-        this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        // this.layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
@@ -46,13 +44,15 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflamos la vista desde el xml
-        View view = layoutInflater.inflate(R.layout.row_lugar_list, null);
+        //View view = layoutInflater.inflate(R.layout.row_lugar_list, null);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.row_lugar_list, parent, false);
         return new ViewHolder(view);
     }
 
     // Usando como base el ViewHolder y lo personalizamos
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
         Lugar lugar = iLugar.getLugarById(position);
         personalizarVista(holder, lugar);
     }
