@@ -1,5 +1,6 @@
 package ogeny.com.mislugaresdemo.adapters;
 
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,8 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import ogeny.com.mislugaresdemo.LugarInfoActivity;
+import ogeny.com.mislugaresdemo.LugarListActivity;
 import ogeny.com.mislugaresdemo.R;
 import ogeny.com.mislugaresdemo.interfaces.ILugar;
 import ogeny.com.mislugaresdemo.models.Lugar;
@@ -17,6 +20,7 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
     protected ILugar iLugar; // Lista de lugares
     // protected LayoutInflater layoutInflater; // Crea layouts a partir de archivos xml
     // protected Context context; // Lo necesitamos para el inflater
+    protected View.OnClickListener _onClickListener;
 
     public LugarAdapter(/*Context _context,*/ ILugar _iLugar) {
         // this.context = _context;
@@ -47,6 +51,9 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
         //View view = layoutInflater.inflate(R.layout.row_lugar_list, null);
         View view = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_lugar_list, parent, false);
+
+        // para el vento click
+        view.setOnClickListener(_onClickListener);
         return new ViewHolder(view);
     }
 
@@ -83,5 +90,9 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
         holder.imvFoto.setImageResource(id);
         holder.imvFoto.setScaleType(ImageView.ScaleType.FIT_END);
         holder.rabValoracion.setRating(lugar.getValoracion());
+    }
+
+    public void setOnClickListener(View.OnClickListener onClickListener) {
+        this._onClickListener = onClickListener;
     }
 }

@@ -4,7 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
 import ogeny.com.mislugaresdemo.adapters.LugarAdapter;
 
@@ -25,5 +27,16 @@ public class LugarListActivity extends AppCompatActivity {
 
         layoutManager = new LinearLayoutManager(this);
         revLugaresList.setLayoutManager(layoutManager);
+
+        // para el vento click
+        lugarAdapter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(LugarListActivity.this, LugarInfoActivity.class);
+                intent.putExtra("id", (long) revLugaresList.getChildAdapterPosition(view));
+                startActivity(intent);
+            }
+        });
     }
+
 }
