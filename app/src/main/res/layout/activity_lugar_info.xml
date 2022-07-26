@@ -208,7 +208,8 @@
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:contentDescription="Logo galería"
-                    app:srcCompat="@android:drawable/ic_menu_gallery" />
+                    app:srcCompat="@android:drawable/ic_menu_gallery"
+                    android:onClick="openGaleria" />
             </LinearLayout>
         </FrameLayout>
     </LinearLayout>

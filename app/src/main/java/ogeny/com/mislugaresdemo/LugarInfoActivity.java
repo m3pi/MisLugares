@@ -13,6 +13,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -29,7 +31,13 @@ import ogeny.com.mislugaresdemo.models.Lugar;
 public class LugarInfoActivity extends AppCompatActivity {
     private long id;
     private Lugar lugar;
-    final static int RESULTADO_EDITAR = 1;
+    // con ActivityResultLauncher no es necesario los códigos
+    // final static int RESULTADO_EDITAR = 1;
+
+    // añadiendo imágenes
+    private ImageView fotoLugar;
+    final static int RESULTADO_GALERIA = 2;
+    final static int RESULTADO_FOTO = 3;
 
     ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(
@@ -47,6 +55,19 @@ public class LugarInfoActivity extends AppCompatActivity {
                         }
                     });
 
+    ActivityResultLauncher<Intent> galeriaArl = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        lugar.setFoto(result.getData().getDataString());
+                        insertarFotoLugar(fotoLugar, lugar.getFoto());
+                    } else {
+                        Toast.makeText(LugarInfoActivity.this, "Foto no cargada", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +76,9 @@ public class LugarInfoActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         id = extras.getLong("id", -1);
+
+        fotoLugar = (ImageView) findViewById(R.id.imv_foto);
+
         updateLayout();
 
     }
@@ -176,6 +200,9 @@ public class LugarInfoActivity extends AppCompatActivity {
                 lugar.setValoracion(v);
             }
         });
+
+        // insewrtar la foto tomada
+        insertarFotoLugar(fotoLugar, lugar.getFoto());
     }
 
     private void openMapa() {
@@ -200,5 +227,22 @@ public class LugarInfoActivity extends AppCompatActivity {
     public void openWeb(View v) {
         startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lugar.getUrl())));
     }
+
+    // region Añadiendo imágenes
+    public void openGaleria(View view) {
+        Intent intent = new Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        galeriaArl.launch(intent);
+    }
+
+    protected void insertarFotoLugar(ImageView imageView, String uri) {
+        if (uri != null && !uri.isEmpty() && !uri.equals("null")) {
+            imageView.setImageURI(Uri.parse(uri));
+        } else {
+            imageView.setImageBitmap(null);
+        }
+    }
+
+    // endregion
 
 }
