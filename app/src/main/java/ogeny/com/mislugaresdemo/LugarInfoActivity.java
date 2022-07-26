@@ -11,6 +11,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -69,8 +70,14 @@ public class LugarInfoActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_share:
+                //Uso de intenciones para compartir
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, String.format("%s - %s", lugar.getNombre(), lugar.getUrl()));
+                startActivity(intent);
                 return true;
             case R.id.action_como_llegar:
+                openMapa();
                 return true;
             case R.id.action_edit:
                 openLugarEeditActivity();
@@ -169,6 +176,29 @@ public class LugarInfoActivity extends AppCompatActivity {
                 lugar.setValoracion(v);
             }
         });
+    }
+
+    private void openMapa() {
+        Uri uri;
+        double lat = lugar.getPosicion().getLatitud();
+        double lng = lugar.getPosicion().getLongitud();
+
+        if (lat != 0 || lng != 0) {
+            uri = Uri.parse("geo:" + lat + "," + lng);
+        } else {
+            uri = Uri.parse("geo:0,0?q=" + lugar.getDireccion());
+        }
+
+        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(intent);
+    }
+
+    public void openLlamar(View v) {
+        startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + lugar.getTelefono())));
+    }
+
+    public void openWeb(View v) {
+        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(lugar.getUrl())));
     }
 
 }

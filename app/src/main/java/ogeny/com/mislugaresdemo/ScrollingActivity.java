@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -151,7 +152,8 @@ public class ScrollingActivity extends AppCompatActivity {
 
     private void openAboutActivity(View view) {
         /*Intent intent = new Intent(this, AboutActivity.class);*/
-        startActivity(new Intent(this, AboutActivity.class));
+        /*startActivity(new Intent(this, AboutActivity.class));*/
+        startActivity(new Intent(this, IntentEjemploActivity.class));
     }
 
     private void openPreferencesActivity() {
