@@ -239,7 +239,7 @@ public class LugarInfoActivity extends AppCompatActivity {
         });
 
         // insewrtar la foto tomada
-        insertarFotoLugar(fotoLugar, lugar.getFoto());
+//        insertarFotoLugar(fotoLugar, lugar.getFoto());
     }
 
     private void openMapa() {
@@ -280,6 +280,7 @@ public class LugarInfoActivity extends AppCompatActivity {
                             READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 imageView.setImageBitmap(reduceBitmap(this, uri, 1024,   1024));
             } else {
+                // esta parte ya no debería ejecutarse
                 imageView.setImageURI(Uri.parse(uri));
             }
 
@@ -288,16 +289,25 @@ public class LugarInfoActivity extends AppCompatActivity {
         }
     }
 
+    // El propósito de este método es obtener un bitmap a partir de la uri indicada pero reescalando
+    // a una resilución que no supere un ancho y un alto.
     public static Bitmap reduceBitmap(Context contexto, String uri,
                                       int maxAncho, int maxAlto) {
         try {
+            // para saber solo las dimenciones originales de la foto y no cargar toda la foto en memmoria
             final BitmapFactory.Options options = new BitmapFactory.Options();
+            // con esto aseguramos que decodeStream solo se almacenen las dimenciones en outWith y outHeight
             options.inJustDecodeBounds = true;
+
+            // como la imagen se puede seleccionar desde la galería o tomada con la cámara, se usa decodeStream
             BitmapFactory.decodeStream(contexto.getContentResolver()
                     .openInputStream(Uri.parse(uri)), null, options);
+
+            // calcular el factor de reducción deseado
             options.inSampleSize = (int) Math.max(
                     Math.ceil(options.outWidth / maxAncho),
                     Math.ceil(options.outHeight / maxAlto));
+            // desactivamos inJustDecodeBounds porque ahora si queremos decodificar la foto
             options.inJustDecodeBounds = false;
             return BitmapFactory.decodeStream(contexto.getContentResolver()
                     .openInputStream(Uri.parse(uri)), null, options);
@@ -368,6 +378,11 @@ https://github.com/commonsguy/cw-omnibus/tree/master/Camera/FileProvider
             Toast.makeText(this, "R.string.msg_no_camera", Toast.LENGTH_LONG).show();
             finish();
         }
+    }
+
+    public void eliminarFoto(View view) {
+        lugar.setFoto(null);
+        insertarFotoLugar(fotoLugar, null);
     }
 
     // endregion
