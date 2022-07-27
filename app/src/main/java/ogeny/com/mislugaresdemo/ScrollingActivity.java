@@ -39,6 +39,9 @@ public class ScrollingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // ciclo de vida
+        Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -211,4 +214,50 @@ public class ScrollingActivity extends AppCompatActivity {
                 preferences.getString("pref_maximo_lugares_pagina", "?"));
         Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
     }
+
+    //region Ciclo de vida
+
+    // Nos indica que la actividad está a punto de ser mostrada al usuario.
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Toast.makeText(this, "onStart", Toast.LENGTH_SHORT).show();
+    }
+
+    // Se llama cuando la actividad va a comenzar a interactuar con el usuario.
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+    }
+
+    // Indica que la actividad está a punto de ser lanzada a segundo plano, normalmente porque otra actividad es lanzada
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Toast.makeText(this, "onPause", Toast.LENGTH_SHORT).show();
+    }
+
+    // La actividad ya no va a ser visible para el usuario
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+    }
+
+    // Indica que la actividad va a volver a ser representada después de haber pasado por onStop().
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        Toast.makeText(this, "onRestart", Toast.LENGTH_SHORT).show();
+    }
+
+    // Se llama antes de que la actividad sea totalmente destruida
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
+    }
+
+    // end region
 }
