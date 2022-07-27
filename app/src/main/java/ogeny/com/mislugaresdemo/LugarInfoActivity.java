@@ -55,8 +55,8 @@ public class LugarInfoActivity extends AppCompatActivity {
 
     // añadiendo imágenes desde la cámara
     private Uri uriFotoLugar;
-//    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
-    private static final String AUTHORITY = BuildConfig.APPLICATION_ID;
+    private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
+//    private static final String AUTHORITY = BuildConfig.APPLICATION_ID;
 
     ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(
@@ -274,7 +274,8 @@ public class LugarInfoActivity extends AppCompatActivity {
 
     protected void insertarFotoLugar(ImageView imageView, String uri) {
         if (uri != null && !uri.isEmpty() && !uri.equals("null")) {
-            if (uri.startsWith("content://ogeny.com.mislugaresdemo/") ||
+//            if (uri.startsWith("content://ogeny.com.mislugaresdemo/") ||
+            if (uri.startsWith("content://" + AUTHORITY +"/") ||
                     ContextCompat.checkSelfPermission(this, Manifest.permission.
                             READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 imageView.setImageBitmap(reduceBitmap(this, uri, 1024,   1024));
@@ -316,6 +317,7 @@ public class LugarInfoActivity extends AppCompatActivity {
                 + "img_" + (System.currentTimeMillis() / 1000) + ".jpg")
         );*/
 /*
+https://github.com/commonsguy/cw-omnibus/tree/master/Camera/FileProvider
         File file = new File(Environment.getExternalStorageDirectory() + File.separator
                 + "img_" + (System.currentTimeMillis() / 1000) + ".jpg");
         uriFotoLugar = FileProvider.getUriForFile(this, AUTHORITY, file);
