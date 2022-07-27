@@ -14,6 +14,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
@@ -34,6 +35,9 @@ public class ScrollingActivity extends AppCompatActivity {
     private ActivityScrollingBinding binding;
     private Button btnAbout;
     private Button btnPreferences;
+    private Button btnTerminos;
+    private Button btnSalir;
+    private Button btnMisLugares;
     public static ILugar iLugar = new LugarService();
 
     // procesos
@@ -75,7 +79,7 @@ public class ScrollingActivity extends AppCompatActivity {
             }
         });
 
-        Button btnTerminos = (Button) findViewById(R.id.btn_terminos);
+        btnTerminos = (Button) findViewById(R.id.btn_terminos);
         btnTerminos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -83,7 +87,7 @@ public class ScrollingActivity extends AppCompatActivity {
             }
         });
 
-        Button btnSalir = (Button) findViewById(R.id.btn_salir);
+        btnSalir = (Button) findViewById(R.id.btn_salir);
         btnSalir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,7 +105,7 @@ public class ScrollingActivity extends AppCompatActivity {
 
         mostrarPreferencias();
 
-        Button btnMisLugares = (Button) findViewById(R.id.btn_mostrar_lugares);
+        btnMisLugares = (Button) findViewById(R.id.btn_mostrar_lugares);
         btnMisLugares.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -269,5 +273,26 @@ public class ScrollingActivity extends AppCompatActivity {
         Toast.makeText(this, "onDestroy", Toast.LENGTH_SHORT).show();
     }
 
-    // end region
+    // endregion
+
+    // region Guardar estado de actividad
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mediaPlayer != null) {
+            outState.putInt("current_time", mediaPlayer.getCurrentPosition());
+        }
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState != null && mediaPlayer != null) {
+            int currentTime = savedInstanceState.getInt("current_time");
+            mediaPlayer.seekTo(currentTime);
+        }
+    }
+
+    // endregion
 }
