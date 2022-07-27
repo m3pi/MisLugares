@@ -25,6 +25,7 @@
         <entry key="app/src/main/res/menu/menu_lugar_info.xml" value="0.1" />
         <entry key="app/src/main/res/menu/menu_scrolling.xml" value="0.1" />
         <entry key="app/src/main/res/xml/preferences.xml" value="0.1" />
+        <entry key="app/src/main/res/xml/provider_paths.xml" value="0.1" />
       </map>
     </option>
   </component>
