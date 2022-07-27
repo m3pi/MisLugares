@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -35,12 +36,19 @@ public class ScrollingActivity extends AppCompatActivity {
     private Button btnPreferences;
     public static ILugar iLugar = new LugarService();
 
+    // procesos
+    MediaPlayer mediaPlayer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // ciclo de vida
         Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();
+
+        // procesos
+        mediaPlayer = MediaPlayer.create(this, R.raw.audio);
+        mediaPlayer.start();
 
         binding = ActivityScrollingBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -229,6 +237,7 @@ public class ScrollingActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Toast.makeText(this, "onResume", Toast.LENGTH_SHORT).show();
+        mediaPlayer.start();
     }
 
     // Indica que la actividad está a punto de ser lanzada a segundo plano, normalmente porque otra actividad es lanzada
@@ -243,6 +252,7 @@ public class ScrollingActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         Toast.makeText(this, "onStop", Toast.LENGTH_SHORT).show();
+        mediaPlayer.pause();
     }
 
     // Indica que la actividad va a volver a ser representada después de haber pasado por onStop().
