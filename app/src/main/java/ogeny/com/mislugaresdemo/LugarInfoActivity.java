@@ -6,6 +6,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -13,7 +14,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
-import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -21,7 +21,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -57,6 +56,9 @@ public class LugarInfoActivity extends AppCompatActivity {
     private Uri uriFotoLugar;
     private static final String AUTHORITY = BuildConfig.APPLICATION_ID + ".provider";
 //    private static final String AUTHORITY = BuildConfig.APPLICATION_ID;
+    // permisos
+    final static int SOLICITUD_PERMISO_READ_EXTERNAL_STORAGE = 0;
+    final static int SOLICITUD_CAMARA_PERMISO_READ_EXTERNAL_STORAGE = 1;
 
     ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(
@@ -239,7 +241,7 @@ public class LugarInfoActivity extends AppCompatActivity {
         });
 
         // insewrtar la foto tomada
-//        insertarFotoLugar(fotoLugar, lugar.getFoto());
+        insertarFotoLugar(fotoLugar, lugar.getFoto());
     }
 
     private void openMapa() {
@@ -267,9 +269,23 @@ public class LugarInfoActivity extends AppCompatActivity {
 
     // region Añadiendo imágenes
     public void openGaleria(View view) {
-        Intent intent = new Intent(Intent.ACTION_PICK,
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        galeriaArl.launch(intent);
+        // verificar si tiene el permiso
+        int permisoLeerAlmacenamientoExterno =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permisoLeerAlmacenamientoExterno == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            galeriaArl.launch(intent);
+        } else {
+            // Snackbar.make(view, "No tiene permiso de leear archivos", Snackbar.LENGTH_SHORT).show();
+            // solicitar permiso
+            solicitarPermiso(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    "Sin el permiso de lectura de archivos no se puede abrir la galería ni tomar fotografías",
+                    SOLICITUD_PERMISO_READ_EXTERNAL_STORAGE,
+                    this);
+        }
+
     }
 
     protected void insertarFotoLugar(ImageView imageView, String uri) {
@@ -320,8 +336,13 @@ public class LugarInfoActivity extends AppCompatActivity {
     }
 
     public void tomarFoto(View view) {
-        /*Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");*/
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        int permisoLeerAlmacenamientoExterno =
+                ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (permisoLeerAlmacenamientoExterno == PackageManager.PERMISSION_GRANTED) {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+            // region practica
+            /*Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");*/
         /*uriFotoLugar = Uri.fromFile(
                 new File(Environment.getExternalStorageDirectory() + File.separator
                 + "img_" + (System.currentTimeMillis() / 1000) + ".jpg")
@@ -354,29 +375,38 @@ https://github.com/commonsguy/cw-omnibus/tree/master/Camera/FileProvider
 //            }
         }*/
 
-        File file = null;
-        try {
-            File rutaImagenes = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-            file = File.createTempFile("img_" + (System.currentTimeMillis() / 1000),
-                    ".jpg",
-                    rutaImagenes
-            );
-        } catch (IOException e) {
-//            e.printStackTrace();
-            Toast.makeText(this, "Error al crear imagen temporal", Toast.LENGTH_SHORT).show();
-        }
+            // endregion
 
-        try {
-            if (file != null) {
-                uriFotoLugar = FileProvider.getUriForFile(this, AUTHORITY, file);
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFotoLugar);
-                camaraArl.launch(intent);
+            File file = null;
+            try {
+                File rutaImagenes = this.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+                file = File.createTempFile("img_" + (System.currentTimeMillis() / 1000),
+                        ".jpg",
+                        rutaImagenes
+                );
+            } catch (IOException e) {
+//            e.printStackTrace();
+                Toast.makeText(this, "Error al crear imagen temporal", Toast.LENGTH_SHORT).show();
             }
-        }
-        catch (ActivityNotFoundException e) {
-            Log.e("mompi", e.toString());
-            Toast.makeText(this, "R.string.msg_no_camera", Toast.LENGTH_LONG).show();
-            finish();
+
+            try {
+                if (file != null) {
+                    uriFotoLugar = FileProvider.getUriForFile(this, AUTHORITY, file);
+                    intent.putExtra(MediaStore.EXTRA_OUTPUT, uriFotoLugar);
+                    camaraArl.launch(intent);
+                }
+            }
+            catch (ActivityNotFoundException e) {
+                Log.e("mompi", e.toString());
+                Toast.makeText(this, "R.string.msg_no_camera", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        } else {
+            solicitarPermiso(
+                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                    "Sin el permiso de lectura de archivos no se puede abrir la galería ni tomar fotografías",
+                    SOLICITUD_CAMARA_PERMISO_READ_EXTERNAL_STORAGE,
+                    this);
         }
     }
 
@@ -387,4 +417,49 @@ https://github.com/commonsguy/cw-omnibus/tree/master/Camera/FileProvider
 
     // endregion
 
+    // region Permisos
+    public static void solicitarPermiso(final String permiso,
+                                        final String justificacion,
+                                        final int requestCode,
+                                        final Activity activity) {
+        // si la primera vez se le deniega el permiso, la segunda vez le mostramos un dialog con una justificación
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permiso)) {
+            new AlertDialog.Builder(activity)
+                    .setTitle("Solicitud de Permiso")
+                    .setMessage(justificacion)
+                    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            ActivityCompat.requestPermissions(activity, new String[] { permiso }, requestCode);
+                        }
+                    }).show();
+        } else {
+            ActivityCompat.requestPermissions(activity, new String[] { permiso }, requestCode);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Comprobamos que sea el código de solicitud de lectura de archivos y llamar al método que solicita el permiso
+        if (requestCode == SOLICITUD_PERMISO_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGaleria(null);
+            } else {
+                Toast.makeText(this, "Sin el permiso, no se puede realizar la acción", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        if (requestCode == SOLICITUD_CAMARA_PERMISO_READ_EXTERNAL_STORAGE) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                tomarFoto(null);
+            } else {
+                Toast.makeText(this, "Sin el permiso, no se puede realizar la acción", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+    }
+
+    // endregion
 }
