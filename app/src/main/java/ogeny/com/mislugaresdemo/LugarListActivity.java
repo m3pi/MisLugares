@@ -1,19 +1,35 @@
 package ogeny.com.mislugaresdemo;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import ogeny.com.mislugaresdemo.adapters.LugarAdapter;
+import ogeny.com.mislugaresdemo.interfaces.LugarService;
 
-public class LugarListActivity extends AppCompatActivity {
+public class LugarListActivity extends AppCompatActivity implements LocationListener {
     private RecyclerView revLugaresList;
     public LugarAdapter lugarAdapter;
     private RecyclerView.LayoutManager layoutManager;
+
+    // localizacion
+    private LocationManager locationManager;
+    private Location mejorLocation;
+    final static int SOLICITUD_PERMISO_LOCALIZACION = 2;
+    private static final long DOS_MINUTOS = 2*60*1000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +53,142 @@ public class LugarListActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+
+        // localización
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        getUltimaLocalizacion();
     }
+
+
+    // region Localizacion
+    private void getUltimaLocalizacion() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                actualizarMejorLocalizacion(locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+            }
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                actualizarMejorLocalizacion(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER));
+            } else {
+                Toast.makeText(this, "Desde 1", Toast.LENGTH_SHORT).show();
+                LugarInfoActivity.solicitarPermiso(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        "Sin el permiso de localización no se puede mostrar la distancia a los luagres",
+                        SOLICITUD_PERMISO_LOCALIZACION,
+                        this);
+            }
+        }  else {
+            Toast.makeText(this, "Desde 2", Toast.LENGTH_SHORT).show();
+            LugarInfoActivity.solicitarPermiso(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    "Sin el permiso de localización no se puede mostrar la distancia a los luagres",
+                    SOLICITUD_PERMISO_LOCALIZACION,
+                    this);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == SOLICITUD_PERMISO_LOCALIZACION) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getUltimaLocalizacion();
+                activarProveedores();
+                lugarAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        activarProveedores();
+    }
+
+    private void activarProveedores() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED) {
+            if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                        20*1000,
+                        5,
+                        this);
+            }
+            if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,
+                        10*1000,
+                        10,
+                        this);
+            }
+            else {
+                Toast.makeText(this, "Desde 01", Toast.LENGTH_SHORT).show();
+                LugarInfoActivity.solicitarPermiso(
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        "Sin el permiso de localización no se puede mostrar la distancia a los luagres",
+                        SOLICITUD_PERMISO_LOCALIZACION,
+                        this);
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        == PackageManager.PERMISSION_GRANTED) {
+            locationManager.removeUpdates(this);
+        }
+    }
+
+    @Override
+    public void onLocationChanged(@NonNull Location location) {
+        Log.d(LugarService.TAG, "Nueva localización:" + location);
+
+        actualizarMejorLocalizacion(location);
+        lugarAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        LocationListener.super.onStatusChanged(provider, status, extras);
+
+        Log.d(LugarService.TAG, "Cambia estado: " + provider);
+        activarProveedores();
+    }
+
+    @Override
+    public void onProviderEnabled(@NonNull String provider) {
+        LocationListener.super.onProviderEnabled(provider);
+
+        Log.d(LugarService.TAG, "Se habilita: " + provider);
+        activarProveedores();
+    }
+
+    @Override
+    public void onProviderDisabled(@NonNull String provider) {
+        LocationListener.super.onProviderDisabled(provider);
+
+        Log.d(LugarService.TAG, "Se deshabilita: " + provider);
+        activarProveedores();
+    }
+
+    private void actualizarMejorLocalizacion(Location location) {
+        if (location != null &&
+                (mejorLocation == null
+                        || location.getAccuracy() < 2 * mejorLocation.getAccuracy()
+                        || location.getTime() - mejorLocation.getTime() > DOS_MINUTOS
+                )) {
+            Log.d(LugarService.TAG, "Nueva mejor localización:");
+            mejorLocation = location;
+
+            LugarService.posicionActual.setLatitud(location.getLatitude());
+            LugarService.posicionActual.setLongitud(location.getLongitude());
+        }
+    }
+
+    // endregion
 
 }

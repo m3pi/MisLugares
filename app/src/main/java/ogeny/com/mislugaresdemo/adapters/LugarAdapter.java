@@ -14,6 +14,7 @@ import ogeny.com.mislugaresdemo.LugarInfoActivity;
 import ogeny.com.mislugaresdemo.LugarListActivity;
 import ogeny.com.mislugaresdemo.R;
 import ogeny.com.mislugaresdemo.interfaces.ILugar;
+import ogeny.com.mislugaresdemo.interfaces.LugarService;
 import ogeny.com.mislugaresdemo.models.Lugar;
 
 public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> {
@@ -33,6 +34,7 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
         private final TextView tevNombre, tevDireccion;
         private final ImageView imvFoto;
         private final RatingBar rabValoracion;
+        public TextView tevDistancia;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -41,6 +43,7 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
             tevDireccion = (TextView) itemView.findViewById(R.id.tev_direccion_row);
             imvFoto = (ImageView) itemView.findViewById(R.id.imv_foto_row);
             rabValoracion = (RatingBar) itemView.findViewById(R.id.rab_valoracion);
+            tevDistancia = (TextView) itemView.findViewById(R.id.tev_distancia);
         }
     }
 
@@ -90,6 +93,16 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
         holder.imvFoto.setImageResource(id);
         holder.imvFoto.setScaleType(ImageView.ScaleType.FIT_END);
         holder.rabValoracion.setRating(lugar.getValoracion());
+
+        if (LugarService.posicionActual != null && lugar.getPosicion() != null) {
+            int d = (int) LugarService.posicionActual.distancia(lugar.getPosicion());
+
+            if (d < 2000) {
+                holder.tevDistancia.setText(d + " m");
+            } else {
+                holder.tevDistancia.setText(d/1000 + " Km");
+            }
+        }
     }
 
     public void setOnClickListener(View.OnClickListener onClickListener) {
