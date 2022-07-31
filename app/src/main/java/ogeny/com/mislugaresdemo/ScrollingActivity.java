@@ -146,6 +146,11 @@ public class ScrollingActivity extends AppCompatActivity {
             openAboutActivity(null);
             return true;
         }
+        if (id == R.id.action_mapa) {
+            Intent intent = new Intent(this, MapaActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 

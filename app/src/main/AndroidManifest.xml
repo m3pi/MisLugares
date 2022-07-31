@@ -5,7 +5,9 @@
 
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
@@ -19,6 +21,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MisLugaresDemo"
         tools:targetApi="31">
+        <activity
+            android:name=".MapaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".IntentEjemploActivity"
             android:exported="false" />
@@ -64,7 +70,14 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-        </provider>
+        </provider> <!-- API KEY -->
+        <!-- https://developers.google.com/maps/documentation/android-sdk/config -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="${MAPS_API_KEY}" />
     </application>
 
 </manifest>
