@@ -73,7 +73,7 @@ public class LugarAdapter extends RecyclerView.Adapter<LugarAdapter.ViewHolder> 
     }
 
     // Personalizamos un ViewHolder a partir de un lugar
-    private void personalizarVista(ViewHolder holder, Lugar lugar) {
+    protected void personalizarVista(ViewHolder holder, Lugar lugar) {
         holder.tevNombre.setText(lugar.getNombre());
         holder.tevDireccion.setText(lugar.getDireccion());
 

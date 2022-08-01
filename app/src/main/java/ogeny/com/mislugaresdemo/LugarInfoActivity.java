@@ -176,7 +176,9 @@ public class LugarInfoActivity extends AppCompatActivity {
     }
 
     private void updateLayout() {
-        lugar = ScrollingActivity.iLugar.getLugarById((int) id);
+        // lugar = ScrollingActivity.iLugar.getLugarById((int) id);
+        //db
+        lugar = LugarListActivity.lugarAdapter.lugarPosicion((int) id);
 
         TextView tevNombre = (TextView) findViewById(R.id.tev_nombre_lugar);
         tevNombre.setText(lugar.getNombre());

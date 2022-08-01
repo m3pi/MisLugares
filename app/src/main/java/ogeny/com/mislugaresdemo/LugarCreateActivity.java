@@ -41,7 +41,9 @@ public class LugarCreateActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         id = extras.getLong("id", -1);
-        lugar = ScrollingActivity.iLugar.getLugarById((int) id);
+        //lugar = ScrollingActivity.iLugar.getLugarById((int) id);
+        //db
+        lugar = LugarListActivity.lugarAdapter.lugarPosicion((int) id);
 
         edtNombre = (EditText) findViewById(R.id.edt_nombre);
         edtNombre.setText(lugar.getNombre());

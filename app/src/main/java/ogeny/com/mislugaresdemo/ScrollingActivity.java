@@ -29,6 +29,7 @@ import android.widget.Toast;
 import ogeny.com.mislugaresdemo.databinding.ActivityScrollingBinding;
 import ogeny.com.mislugaresdemo.interfaces.ILugar;
 import ogeny.com.mislugaresdemo.interfaces.LugarService;
+import ogeny.com.mislugaresdemo.models.LugaresDB;
 
 public class ScrollingActivity extends AppCompatActivity {
 
@@ -38,7 +39,9 @@ public class ScrollingActivity extends AppCompatActivity {
     private Button btnTerminos;
     private Button btnSalir;
     private Button btnMisLugares;
-    public static ILugar iLugar = new LugarService();
+    //public static ILugar iLugar = new LugarService();
+    // base de datos
+    public static LugaresDB iLugar;
 
     // procesos
     MediaPlayer mediaPlayer;
@@ -46,6 +49,9 @@ public class ScrollingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // base de datos
+        iLugar = new LugaresDB(this);
 
         // ciclo de vida
         Toast.makeText(this, "onCreate", Toast.LENGTH_SHORT).show();

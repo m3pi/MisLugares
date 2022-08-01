@@ -1,10 +1,13 @@
 package ogeny.com.mislugaresdemo.models;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class LugaresDB extends SQLiteOpenHelper {
+import ogeny.com.mislugaresdemo.interfaces.ILugar;
+
+public class LugaresDB extends SQLiteOpenHelper implements ILugar {
     Context _context;
 
     public LugaresDB(Context context) {
@@ -105,6 +108,58 @@ public class LugaresDB extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
+
+    }
+
+    public static Lugar extraerLugar(Cursor cursor) {
+        Lugar lugar = new Lugar();
+        lugar.setNombre(cursor.getString(1));
+        lugar.setDireccion(cursor.getString(2));
+        lugar.setPosicion(new GeoPunto(cursor.getDouble(3),
+                cursor.getDouble(4)));
+        lugar.setTipoLugar(TipoLugar.values()[cursor.getInt(5)]);
+        lugar.setFoto(cursor.getString(6));
+        lugar.setTelefono(cursor.getInt(7));
+        lugar.setUrl(cursor.getString(8));
+        lugar.setComentario(cursor.getString(9));
+        lugar.setFecha(cursor.getLong(10));
+        lugar.setValoracion(cursor.getFloat(11));
+        return lugar;
+    }
+
+    public Cursor extraerCursor() {
+        String consulta = "SELECT * FROM Lugares";
+        SQLiteDatabase db = getReadableDatabase();
+        return db.rawQuery(consulta, null);
+    }
+
+    @Override
+    public Lugar getLugarById(int id) {
+        return null;
+    }
+
+    @Override
+    public void anyade(Lugar lugar) {
+
+    }
+
+    @Override
+    public int nuevo() {
+        return 0;
+    }
+
+    @Override
+    public void borrar(int id) {
+
+    }
+
+    @Override
+    public int tamanyo() {
+        return 0;
+    }
+
+    @Override
+    public void actualiza(int id, Lugar lugar) {
 
     }
 }

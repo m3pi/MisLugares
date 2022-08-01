@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -18,11 +19,18 @@ import android.view.View;
 import android.widget.Toast;
 
 import ogeny.com.mislugaresdemo.adapters.LugarAdapter;
+import ogeny.com.mislugaresdemo.adapters.LugarDbAdapter;
+import ogeny.com.mislugaresdemo.interfaces.ILugar;
 import ogeny.com.mislugaresdemo.interfaces.LugarService;
+import ogeny.com.mislugaresdemo.models.LugaresDB;
 
 public class LugarListActivity extends AppCompatActivity implements LocationListener {
     private RecyclerView revLugaresList;
-    public LugarAdapter lugarAdapter;
+    // public LugarAdapter lugarAdapter;
+    // base de datos
+    // base de datos
+    public static LugaresDB iLugar;
+    public static LugarDbAdapter lugarAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
     // localizacion
@@ -38,7 +46,11 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
 
         revLugaresList = (RecyclerView) findViewById(R.id.rev_lugares_list);
         //lugarAdapter = new LugarAdapter(this, ScrollingActivity.iLugar);
-        lugarAdapter = new LugarAdapter(ScrollingActivity.iLugar);
+        //lugarAdapter = new LugarAdapter(ScrollingActivity.iLugar);
+        // base de datos
+        // base de datos
+        iLugar = new LugaresDB(this);
+        lugarAdapter = new LugarDbAdapter(iLugar, iLugar.extraerCursor());
         revLugaresList.setAdapter(lugarAdapter);
 
         layoutManager = new LinearLayoutManager(this);
@@ -62,6 +74,7 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
 
 
     // region Localizacion
+    @SuppressLint("MissingPermission")
     private void getUltimaLocalizacion() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
@@ -108,6 +121,7 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
         activarProveedores();
     }
 
+    @SuppressLint("MissingPermission")
     private void activarProveedores() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
         == PackageManager.PERMISSION_GRANTED) {
@@ -134,6 +148,7 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
         }
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onPause() {
         super.onPause();
