@@ -66,15 +66,23 @@ public class MapaActivity extends FragmentActivity
             }
         }
 
-        if (ScrollingActivity.iLugar.tamanyo() > 0) {
-            GeoPunto p = ScrollingActivity.iLugar.getLugarById(0).getPosicion();
+        //if (ScrollingActivity.iLugar.tamanyo() > 0) {
+        // db
+        if (LugarListActivity.lugarAdapter.getItemCount() > 0) {
+            //GeoPunto p = ScrollingActivity.iLugar.getLugarById(0).getPosicion();
+            // db
+            GeoPunto p = LugarListActivity.lugarAdapter.lugarPosicion(0).getPosicion();
             mapa.moveCamera(
                     CameraUpdateFactory.newLatLngZoom(new LatLng(p.getLatitud(), p.getLongitud()),
                             12));
         }
 
-        for (int n = 0; n < ScrollingActivity.iLugar.tamanyo(); n++) {
-            Lugar lugar = ScrollingActivity.iLugar.getLugarById(n);
+        //for (int n = 0; n < ScrollingActivity.iLugar.tamanyo(); n++) {
+        // db
+        for (int n = 0; n < LugarListActivity.lugarAdapter.getItemCount() ; n++) {
+            //Lugar lugar = ScrollingActivity.iLugar.getLugarById(n);
+            // db
+            Lugar lugar = LugarListActivity.lugarAdapter.lugarPosicion(n);
             GeoPunto p = lugar.getPosicion();
 
             if (p != null && p.getLatitud() != 0) {
@@ -96,8 +104,10 @@ public class MapaActivity extends FragmentActivity
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
-        for (int id = 0; id < ScrollingActivity.iLugar.tamanyo(); id++) {
-            if (ScrollingActivity.iLugar.getLugarById(id).getNombre()
+        //for (int id = 0; id < ScrollingActivity.iLugar.tamanyo(); id++) {
+        for (int id = 0; id < LugarListActivity.lugarAdapter.getItemCount(); id++) {
+            //if (ScrollingActivity.iLugar.getLugarById(id).getNombre()
+            if (LugarListActivity.lugarAdapter.lugarPosicion(id).getNombre()
                     .equals(marker.getTitle())) {
                 Intent intent = new Intent(this, LugarInfoActivity.class);
                 intent.putExtra("id", (long) id);
