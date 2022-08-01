@@ -16,7 +16,7 @@
             android:defaultValue="12" />
 
         <ListPreference
-            android:key="orden_lugares"
+            android:key="pref_orden_lugares"
             android:title="Criterio de ordenación"
             android:summary="Que lugares se mostraran primero"
             android:entries="@array/tiposOrden"

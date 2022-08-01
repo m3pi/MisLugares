@@ -1,10 +1,14 @@
 package ogeny.com.mislugaresdemo.models;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
 
+import ogeny.com.mislugaresdemo.LugarListActivity;
 import ogeny.com.mislugaresdemo.interfaces.ILugar;
 
 public class LugaresDB extends SQLiteOpenHelper implements ILugar {
@@ -128,7 +132,30 @@ public class LugaresDB extends SQLiteOpenHelper implements ILugar {
     }
 
     public Cursor extraerCursor() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(_context);
         String consulta = "SELECT * FROM Lugares";
+        String orden = preferences.getString("pref_orden_lugares", "0");
+        String take = preferences.getString("pref_maximo_lugares_pagina", "12");
+
+        switch (orden) {
+            case "1":
+                consulta = "SELECT * FROM Lugares ORDER BY Valoracion DESC";
+                break;
+            case "2":
+                GeoPunto posicionActual = ILugar.posicionActual;
+                double lon = posicionActual.getLongitud();
+                double lat = posicionActual.getLatitud();
+                consulta = "SELECT * FROM lugares ORDER BY " +
+                        "(" + lon + "-longitud)*(" + lon + "-longitud) + " +
+                        "(" + lat + "-latitud )*(" + lat + "-latitud )";
+                break;
+            default:
+                break;
+        }
+
+        // cantidad de ementos a obtner
+        consulta += " LIMIT " + take;
+
         SQLiteDatabase db = getReadableDatabase();
         return db.rawQuery(consulta, null);
     }
@@ -161,5 +188,11 @@ public class LugaresDB extends SQLiteOpenHelper implements ILugar {
     @Override
     public void actualiza(int id, Lugar lugar) {
 
+    }
+
+    // mostrar las preferencias
+    private String getPreferenciaOrden() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(_context);
+        return preferences.getString("pref_orden_lugares", "0");
     }
 }

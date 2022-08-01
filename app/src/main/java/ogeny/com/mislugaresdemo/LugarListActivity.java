@@ -1,5 +1,9 @@
 package ogeny.com.mislugaresdemo;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -8,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -15,6 +20,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -38,6 +45,23 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
     private Location mejorLocation;
     final static int SOLICITUD_PERMISO_LOCALIZACION = 2;
     private static final long DOS_MINUTOS = 2*60*1000;
+
+    // db refrescar la lista con los parámetros de preferencias
+    ActivityResultLauncher<Intent> preferencesArl = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            new ActivityResultCallback<ActivityResult>() {
+                @Override
+                public void onActivityResult(ActivityResult result) {
+                    Integer a = result.getResultCode();
+
+                    Log.i("resultado", a.toString());
+                    if (result.getResultCode() == Activity.RESULT_CANCELED) {
+                        lugarAdapter.setMyCursor(iLugar.extraerCursor());
+                        lugarAdapter.notifyDataSetChanged();
+                    } else {
+                        Toast.makeText(LugarListActivity.this, "Error preferencias actulizar", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,5 +229,52 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
     }
 
     // endregion
+
+    // db refrescar la lista con los parámetros de preferencias
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.menu_scrolling, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        if (id == R.id.menu_buscar) {
+            //openLugarInfoActivity();
+            return true;
+        }
+
+        if (id == R.id.action_preferences) {
+            // openPreferencesActivity();
+            lanzarPreferencias(null);
+            return true;
+        }
+        if (id == R.id.action_about) {
+            //openAboutActivity(null);
+            return true;
+        }
+        if (id == R.id.action_mapa) {
+            Intent intent = new Intent(this, MapaActivity.class);
+            startActivity(intent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void lanzarPreferencias(View view) {
+        Intent intent = new Intent(this, PreferencesActivity.class);
+        preferencesArl.launch(intent);
+    }
 
 }
