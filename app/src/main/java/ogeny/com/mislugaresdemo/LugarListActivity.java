@@ -272,6 +272,12 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
         return super.onOptionsItemSelected(item);
     }
 
+    /* Si no actualizamos el cursor con la lista el cambio de preferencias no será efectivo hasta
+    que salgas de aplicación y vuelvas a entrar. Para evitar este incoveniente, llama a la actividad
+    PreferenciasActivity mediante startActivityForResult(). En el método onActivityResult() has de
+    actualizar el cursor de adaptado e indicar todos los elementos han de redibujarse. Para esta
+    última acción puedes utilizar adaptador.notifyDataSetChanged().
+    * */
     public void lanzarPreferencias(View view) {
         Intent intent = new Intent(this, PreferencesActivity.class);
         preferencesArl.launch(intent);
