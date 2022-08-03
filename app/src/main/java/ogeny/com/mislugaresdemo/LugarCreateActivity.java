@@ -22,6 +22,8 @@ public class LugarCreateActivity extends AppCompatActivity {
     /*private EditText entrada;
     private TextView salida;*/
     private long id;
+    //db
+    private long _id;
     private Lugar lugar;
     private EditText edtNombre;
     private Spinner sprTipo;
@@ -43,7 +45,14 @@ public class LugarCreateActivity extends AppCompatActivity {
         id = extras.getLong("id", -1);
         //lugar = ScrollingActivity.iLugar.getLugarById((int) id);
         //db
-        lugar = LugarListActivity.lugarAdapter.lugarPosicion((int) id);
+        _id = extras.getLong("id", -1);
+        if (_id != -1) {
+            // extraemos de la base de datos, cuando se crea un nuevo lugar
+            lugar = LugarListActivity.iLugar.getLugarById((int) id);
+        } else {
+            // lo obtenemos de una posición del adaptador
+            lugar = LugarListActivity.lugarAdapter.lugarPosicion((int) id);
+        }
 
         edtNombre = (EditText) findViewById(R.id.edt_nombre);
         edtNombre.setText(lugar.getNombre());
@@ -87,6 +96,10 @@ public class LugarCreateActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_cancel:
+                if (_id == -1) {
+                    // es nuevo registro, se elimina registros con propiedades en blanco
+                    LugarListActivity.iLugar.borrar((int) -1);
+                }
                 setResult(RESULT_CANCELED);
                 finish();
                 return true;
@@ -121,7 +134,24 @@ public class LugarCreateActivity extends AppCompatActivity {
         lugar.setUrl(edtUrl.getText().toString());
         lugar.setComentario(edtComentario.getText().toString());
 
-        ScrollingActivity.iLugar.actualiza((int) id, lugar);
+        //ScrollingActivity.iLugar.actualiza((int) id, lugar);
+        // db
+        long lugarId = id;
+        if (_id == -1) {
+            // es registro de un lugar
+            lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
+        }
+        // int lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
+        ScrollingActivity.iLugar.actualiza((int)lugarId, lugar);
+        // para actualizar la vista con los nuevos cambios
+        LugarListActivity.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
+
+        if (id != -1) {
+            // para actualizar el recyclerview, esto provocará una llamada al método onBindViewHolder()
+            LugarListActivity.lugarAdapter.notifyItemChanged((int) lugarId);
+        } else {
+            LugarListActivity.lugarAdapter.notifyDataSetChanged();
+        }
 
         setResult(RESULT_OK);
         finish();

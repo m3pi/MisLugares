@@ -162,7 +162,20 @@ public class LugaresDB extends SQLiteOpenHelper implements ILugar {
 
     @Override
     public Lugar getLugarById(int id) {
-        return null;
+        Lugar lugar = null;
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = db.rawQuery("SELECT * FROM Lugares WHERE LugarId = " + id, null);
+
+        if (cursor != null) {
+            // para el cursor pase a la siguiente fila encontrada. Como es la primera llamada estamos hablando del primer elemento
+            if (cursor.moveToNext()) {
+                lugar = extraerLugar(cursor);
+            }
+        }
+
+        cursor.close();
+        db.close();
+        return lugar;
     }
 
     @Override
@@ -172,12 +185,33 @@ public class LugaresDB extends SQLiteOpenHelper implements ILugar {
 
     @Override
     public int nuevo() {
-        return 0;
+        int lugarId = -1;
+        Lugar lugar = new Lugar();
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("INSERT INTO Lugares (Longitud, Latitud, Tipo, Fecha) " +
+                "VALUES (" + lugar.getPosicion().getLongitud() + "," +
+                lugar.getPosicion().getLatitud() + "," +
+                lugar.getTipoLugar().ordinal() + "," +
+                lugar.getFecha() +
+                ")");
+
+        Cursor cursor = db.rawQuery("SELECT LugarId FROM Lugares WHERE Fecha = " + lugar.getFecha(), null);
+
+        if (cursor.moveToNext()) {
+            lugarId = cursor.getInt(0);
+        }
+
+        cursor.close();
+        db.close();
+
+        return lugarId;
     }
 
     @Override
     public void borrar(int id) {
-
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM Lugares WHERE LugarId = " + id);
+        db.close();
     }
 
     @Override
@@ -187,7 +221,21 @@ public class LugaresDB extends SQLiteOpenHelper implements ILugar {
 
     @Override
     public void actualiza(int id, Lugar lugar) {
-
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("UPDATE Lugares SET" +
+                "nombre = '" + lugar.getNombre() +
+                "', direccion = '" + lugar.getDireccion() +
+                "', longitud = " + lugar.getPosicion().getLongitud() +
+                ", latitud = " + lugar.getPosicion().getLatitud() +
+                ", tipo = " + lugar.getTipoLugar().ordinal() +
+                ", foto = '" + lugar.getFoto() +
+                "', telefono = " + lugar.getTelefono() +
+                ", url = '" + lugar.getUrl() +
+                "', comentario = '" + lugar.getComentario() +
+                "', fecha = " + lugar.getFecha() +
+                ", valoracion = " + lugar.getValoracion() +
+                "WHERE LugarId = " + id);
+        db.close();
     }
 
     // mostrar las preferencias

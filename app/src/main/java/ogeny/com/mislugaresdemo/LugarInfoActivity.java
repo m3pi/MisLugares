@@ -70,7 +70,7 @@ public class LugarInfoActivity extends AppCompatActivity {
                             if (result.getResultCode() == Activity.RESULT_OK) {
                                 // otra opcion es obtener el valor de un extra
                                 Log.i("llamada", "ingreso");
-                                updateLayout();
+                                updateLugar();
                                 findViewById(R.id.info_lugar).invalidate();
                             }
                         }
@@ -118,7 +118,7 @@ public class LugarInfoActivity extends AppCompatActivity {
 
         fotoLugar = (ImageView) findViewById(R.id.imv_foto);
 
-        updateLayout();
+        updateLugar();
 
     }
 
@@ -160,7 +160,12 @@ public class LugarInfoActivity extends AppCompatActivity {
                 .setPositiveButton("Eliminar", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        ScrollingActivity.iLugar.borrar((int) id);
+                        //ScrollingActivity.iLugar.borrar((int) id);
+                        // db
+                        int lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
+                        LugarListActivity.iLugar.borrar(lugarId);
+                        LugarListActivity.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
+                        LugarListActivity.lugarAdapter.notifyDataSetChanged();
                         finish();
                     }
                 })
@@ -175,10 +180,15 @@ public class LugarInfoActivity extends AppCompatActivity {
         activityResultLauncher.launch(intent);
     }
 
-    private void updateLayout() {
+    private void updateLugar() {
         // lugar = ScrollingActivity.iLugar.getLugarById((int) id);
         //db
         lugar = LugarListActivity.lugarAdapter.lugarPosicion((int) id);
+        // para actualizar la valoracion
+        int lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
+        LugarListActivity.iLugar.actualiza(lugarId, lugar);
+        LugarListActivity.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
+        LugarListActivity.lugarAdapter.notifyItemChanged((int) id);
 
         TextView tevNombre = (TextView) findViewById(R.id.tev_nombre_lugar);
         tevNombre.setText(lugar.getNombre());
@@ -239,6 +249,8 @@ public class LugarInfoActivity extends AppCompatActivity {
             @Override
             public void onRatingChanged(RatingBar ratingBar, float v, boolean b) {
                 lugar.setValoracion(v);
+                //cuando se cambie el valor llamamos a updateLayput para almacenar en la db
+                updateLugar();
             }
         });
 
@@ -305,6 +317,9 @@ public class LugarInfoActivity extends AppCompatActivity {
         } else {
             imageView.setImageBitmap(null);
         }
+
+        // para guardar en la db
+        updateLugar();
     }
 
     // El propósito de este método es obtener un bitmap a partir de la uri indicada pero reescalando
