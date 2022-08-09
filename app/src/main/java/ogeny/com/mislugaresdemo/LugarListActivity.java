@@ -32,13 +32,13 @@ import ogeny.com.mislugaresdemo.interfaces.LugarService;
 import ogeny.com.mislugaresdemo.models.LugaresDB;
 
 public class LugarListActivity extends AppCompatActivity implements LocationListener {
-    private RecyclerView revLugaresList;
+    /*private RecyclerView revLugaresList;*/
     // public LugarAdapter lugarAdapter;
     // base de datos
     // base de datos
     public static LugaresDB iLugar;
-    public static LugarDbAdapter lugarAdapter;
-    private RecyclerView.LayoutManager layoutManager;
+    /*public static LugarDbAdapter lugarAdapter;*/
+    /*private RecyclerView.LayoutManager layoutManager;*/
 
     // localizacion
     private LocationManager locationManager;
@@ -55,8 +55,8 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
 
                     Log.i("resultado", a.toString());
                     if (result.getResultCode() == Activity.RESULT_CANCELED) {
-                        lugarAdapter.setMyCursor(iLugar.extraerCursor());
-                        lugarAdapter.notifyDataSetChanged();
+                        SelectorFragment.lugarAdapter.setMyCursor(iLugar.extraerCursor());
+                        SelectorFragment.lugarAdapter.notifyDataSetChanged();
                     } else {
                         Toast.makeText(LugarListActivity.this, "Error preferencias actulizar", Toast.LENGTH_SHORT).show();
                     }
@@ -68,13 +68,13 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lugar_list);
 
-        revLugaresList = (RecyclerView) findViewById(R.id.rev_lugares_list);
+       /* revLugaresList = (RecyclerView) findViewById(R.id.rev_lugares_list);
         //lugarAdapter = new LugarAdapter(this, ScrollingActivity.iLugar);
         //lugarAdapter = new LugarAdapter(ScrollingActivity.iLugar);
         // base de datos
-        // base de datos
+        // base de datos*/
         iLugar = new LugaresDB(this);
-        lugarAdapter = new LugarDbAdapter(iLugar, iLugar.extraerCursor());
+        /*lugarAdapter = new LugarDbAdapter(iLugar, iLugar.extraerCursor());
         revLugaresList.setAdapter(lugarAdapter);
 
         layoutManager = new LinearLayoutManager(this);
@@ -88,7 +88,7 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
                 intent.putExtra("id", (long) revLugaresList.getChildAdapterPosition(view));
                 startActivity(intent);
             }
-        });
+        });*/
 
 
         // localización
@@ -134,7 +134,7 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
             if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 getUltimaLocalizacion();
                 activarProveedores();
-                lugarAdapter.notifyDataSetChanged();
+                /*lugarAdapter.notifyDataSetChanged();*/
             }
         }
     }
@@ -187,7 +187,7 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
         Log.d(LugarService.TAG, "Nueva localización:" + location);
 
         actualizarMejorLocalizacion(location);
-        lugarAdapter.notifyDataSetChanged();
+        /*lugarAdapter.notifyDataSetChanged();*//*lugarAdapter.notifyDataSetChanged();*/
     }
 
     @Override

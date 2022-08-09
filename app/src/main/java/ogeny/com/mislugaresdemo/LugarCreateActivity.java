@@ -51,7 +51,7 @@ public class LugarCreateActivity extends AppCompatActivity {
             lugar = LugarListActivity.iLugar.getLugarById((int) id);
         } else {
             // lo obtenemos de una posición del adaptador
-            lugar = LugarListActivity.lugarAdapter.lugarPosicion((int) id);
+            lugar = SelectorFragment.lugarAdapter.lugarPosicion((int) id);
         }
 
         edtNombre = (EditText) findViewById(R.id.edt_nombre);
@@ -139,18 +139,18 @@ public class LugarCreateActivity extends AppCompatActivity {
         long lugarId = id;
         if (_id == -1) {
             // es registro de un lugar
-            lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
+            lugarId = SelectorFragment.lugarAdapter.idPosicion((int) id);
         }
         // int lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
         ScrollingActivity.iLugar.actualiza((int)lugarId, lugar);
         // para actualizar la vista con los nuevos cambios
-        LugarListActivity.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
+        SelectorFragment.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
 
         if (id != -1) {
             // para actualizar el recyclerview, esto provocará una llamada al método onBindViewHolder()
-            LugarListActivity.lugarAdapter.notifyItemChanged((int) lugarId);
+            SelectorFragment.lugarAdapter.notifyItemChanged((int) lugarId);
         } else {
-            LugarListActivity.lugarAdapter.notifyDataSetChanged();
+            SelectorFragment.lugarAdapter.notifyDataSetChanged();
         }
 
         setResult(RESULT_OK);

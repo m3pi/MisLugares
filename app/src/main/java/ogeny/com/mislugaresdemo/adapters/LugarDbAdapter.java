@@ -51,6 +51,6 @@ public class LugarDbAdapter extends LugarAdapter {
     public int getItemCount() {
         //return super.getItemCount();
 
-        return myCursor.getCount();
+        return myCursor == null ? 0 : myCursor.getCount();
     }
 }

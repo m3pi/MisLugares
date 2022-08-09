@@ -222,7 +222,7 @@ public class LugaresDB extends SQLiteOpenHelper implements ILugar {
     @Override
     public void actualiza(int id, Lugar lugar) {
         SQLiteDatabase db = getWritableDatabase();
-        db.execSQL("UPDATE Lugares SET" +
+        db.execSQL("UPDATE Lugares SET " +
                 "nombre = '" + lugar.getNombre() +
                 "', direccion = '" + lugar.getDireccion() +
                 "', longitud = " + lugar.getPosicion().getLongitud() +
@@ -234,7 +234,7 @@ public class LugaresDB extends SQLiteOpenHelper implements ILugar {
                 "', comentario = '" + lugar.getComentario() +
                 "', fecha = " + lugar.getFecha() +
                 ", valoracion = " + lugar.getValoracion() +
-                "WHERE LugarId = " + id);
+                " WHERE LugarId = " + id);
         db.close();
     }
 

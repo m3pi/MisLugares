@@ -162,10 +162,15 @@ public class LugarInfoActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         //ScrollingActivity.iLugar.borrar((int) id);
                         // db
-                        int lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
+                        /*int lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
                         LugarListActivity.iLugar.borrar(lugarId);
                         LugarListActivity.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
-                        LugarListActivity.lugarAdapter.notifyDataSetChanged();
+                        LugarListActivity.lugarAdapter.notifyDataSetChanged();*/
+                        // fragments
+                        int lugarId = SelectorFragment.lugarAdapter.idPosicion((int) id);
+                        LugarListActivity.iLugar.borrar(lugarId);
+                        SelectorFragment.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
+                        SelectorFragment.lugarAdapter.notifyDataSetChanged();
                         finish();
                     }
                 })
@@ -183,12 +188,12 @@ public class LugarInfoActivity extends AppCompatActivity {
     private void updateLugar() {
         // lugar = ScrollingActivity.iLugar.getLugarById((int) id);
         //db
-        lugar = LugarListActivity.lugarAdapter.lugarPosicion((int) id);
+        lugar = SelectorFragment.lugarAdapter.lugarPosicion((int) id);
         // para actualizar la valoracion
-        int lugarId = LugarListActivity.lugarAdapter.idPosicion((int) id);
+        int lugarId = SelectorFragment.lugarAdapter.idPosicion((int) id);
         LugarListActivity.iLugar.actualiza(lugarId, lugar);
-        LugarListActivity.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
-        LugarListActivity.lugarAdapter.notifyItemChanged((int) id);
+        SelectorFragment.lugarAdapter.setMyCursor(LugarListActivity.iLugar.extraerCursor());
+        SelectorFragment.lugarAdapter.notifyItemChanged((int) id);
 
         TextView tevNombre = (TextView) findViewById(R.id.tev_nombre_lugar);
         tevNombre.setText(lugar.getNombre());
@@ -255,7 +260,10 @@ public class LugarInfoActivity extends AppCompatActivity {
         });
 
         // insewrtar la foto tomada
-        insertarFotoLugar(fotoLugar, lugar.getFoto());
+        Toast.makeText(this, Boolean.toString(lugar.getFoto().isEmpty()), Toast.LENGTH_SHORT).show();
+        if (!lugar.getFoto().isEmpty()) {
+            insertarFotoLugar(fotoLugar, lugar.getFoto());
+        }
     }
 
     private void openMapa() {
