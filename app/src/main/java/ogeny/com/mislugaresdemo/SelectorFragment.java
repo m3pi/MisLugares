@@ -88,9 +88,10 @@ public class SelectorFragment extends Fragment {
         lugarAdapter.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getContext(), LugarInfoActivity.class);
+                /*Intent intent = new Intent(getContext(), LugarInfoActivity.class);
                 intent.putExtra("id", (long) revLugaresList.getChildAdapterPosition(view));
-                startActivity(intent);
+                startActivity(intent);*/
+                ((LugarListActivity)getActivity()).mostrarLugar(revLugaresList.getChildAdapterPosition(view));
             }
         });
 

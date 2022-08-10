@@ -45,6 +45,7 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
     private Location mejorLocation;
     final static int SOLICITUD_PERMISO_LOCALIZACION = 2;
     private static final long DOS_MINUTOS = 2*60*1000;
+    private LugarInfoFragment lugarInfoFragment;
 
     // db refrescar la lista con los parámetros de preferencias
     ActivityResultLauncher<Intent> preferencesArl = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
@@ -94,6 +95,10 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
         // localización
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         getUltimaLocalizacion();
+
+        // fragment
+        lugarInfoFragment = (LugarInfoFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.vista_lugar_fragment);
     }
 
 
@@ -143,6 +148,11 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
     protected void onResume() {
         super.onResume();
         activarProveedores();
+
+        // insertar el primer elemento al segundo fragment
+        if (lugarInfoFragment != null && SelectorFragment.lugarAdapter.getItemCount() > 0) {
+            lugarInfoFragment.refrescarLugar(0);
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -281,6 +291,18 @@ public class LugarListActivity extends AppCompatActivity implements LocationList
     public void lanzarPreferencias(View view) {
         Intent intent = new Intent(this, PreferencesActivity.class);
         preferencesArl.launch(intent);
+    }
+
+    // fragment
+    public void mostrarLugar(long id) {
+        if (lugarInfoFragment != null) {
+            lugarInfoFragment.refrescarLugar(id); //id
+        } else {
+            Intent intent = new Intent(this, LugarInfoActivity.class);
+            intent.putExtra("id", id);
+            // startActivityForResult(intent, 0);
+            preferencesArl.launch(intent);
+        }
     }
 
 }
