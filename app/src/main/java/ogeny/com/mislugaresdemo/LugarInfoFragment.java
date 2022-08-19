@@ -3,6 +3,8 @@ package ogeny.com.mislugaresdemo;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -21,9 +23,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -40,11 +44,16 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import ogeny.com.mislugaresdemo.models.Lugar;
 
-public class LugarInfoFragment extends Fragment {
+public class LugarInfoFragment extends Fragment implements
+        TimePickerDialog.OnTimeSetListener,
+        DatePickerDialog.OnDateSetListener {
     private long id;
     private Lugar lugar;
     // con ActivityResultLauncher no es necesario los códigos
@@ -138,6 +147,23 @@ public class LugarInfoFragment extends Fragment {
         //return super.onCreateView(inflater, container, savedInstanceState);
         View vista = inflater.inflate(R.layout.activity_lugar_info,container,false);
         setHasOptionsMenu(true);
+
+        ImageView imvHora = (ImageView) vista.findViewById(R.id.imv_hora);
+        imvHora.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cambiarHora();
+            }
+        });
+
+        ImageView imvFecha = (ImageView) vista.findViewById(R.id.imv_fecha);
+        imvFecha.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cambiarFecha();
+            }
+        });
+
         return vista;
     }
 
@@ -557,5 +583,60 @@ https://github.com/commonsguy/cw-omnibus/tree/master/Camera/FileProvider
     private ImageView getFotoOfView(){
         return (ImageView) myView.findViewById(R.id.imv_foto);
     }
+
+    // region Calendario
+    private void cambiarHora() {
+        DialogSelectorHora dialogo = new DialogSelectorHora();
+        dialogo.setOnTimeSetListener((TimePickerDialog.OnTimeSetListener) this);
+        Bundle args = new Bundle();
+        args.putLong("fecha", lugar.getFecha());
+        dialogo.setArguments(args);
+        dialogo.show(getActivity().getSupportFragmentManager(), "selectorHora");
+
+    }
+
+    private void cambiarFecha() {
+        DialogSelectorFecha dialogo = new DialogSelectorFecha();
+        dialogo.setOnDateSetListener((DatePickerDialog.OnDateSetListener) this);
+        Bundle args = new Bundle();
+        args.putLong("fecha", lugar.getFecha());
+        dialogo.setArguments(args);
+        dialogo.show(getActivity().getSupportFragmentManager(), "selectorFecha");
+
+    }
+
+    @Override
+    public void onTimeSet(TimePicker timePicker, int hour, int minute) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(lugar.getFecha());
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+
+        lugar.setFecha(calendar.getTimeInMillis());
+        refrescarLugar();
+
+        TextView tevHora = (TextView) getView().findViewById(R.id.tev_hora);
+        SimpleDateFormat formato = new SimpleDateFormat("HH:mm", Locale.getDefault());
+
+        tevHora.setText(formato.format(new Date(lugar.getFecha())));
+    }
+
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(lugar.getFecha());
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+
+        lugar.setFecha(calendar.getTimeInMillis());
+        refrescarLugar();
+
+        TextView tevFecha = (TextView) getView().findViewById(R.id.tev_fecha);
+        DateFormat formato = DateFormat.getDateInstance();
+
+        tevFecha.setText(formato.format(new Date(lugar.getFecha())));
+    }
+    // endregion
 
 }
